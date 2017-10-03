@@ -100,6 +100,20 @@ func (c *CukooFilter) insert(index int, footprint byte) bool {
 // return True;
 // return False;
 func (c *CukooFilter) Lookup(data []byte) bool {
+	f := c.fingerprint(data)
+	hashV := byte(hash(data))
+
+	i1 := int(hashV) % len(c.buckets)
+	i2 := i1 ^ int(byte(hash([]byte{hashV})))
+
+	b1 := c.buckets[i1]
+	b2 := c.buckets[i2]
+
+	for i := 0; i < bucketSize; i++ {
+		if b1[i] == f || b2[i] == f {
+			return true
+		}
+	}
 	return false
 }
 
@@ -112,6 +126,27 @@ func (c *CukooFilter) Lookup(data []byte) bool {
 // return True;
 // return False;
 func (c *CukooFilter) Delete(data []byte) bool {
+	f := c.fingerprint(data)
+	hashV := byte(hash(data))
+
+	i1 := int(hashV) % len(c.buckets)
+	i2 := i1 ^ int(byte(hash([]byte{hashV})))
+
+	b1 := c.buckets[i1]
+	b2 := c.buckets[i2]
+
+	for i := 0; i < bucketSize; i++ {
+		if b1[i] == f {
+			b1[i] = 0
+			return true
+		}
+
+		if b2[i] == f {
+			b2[i] = 0
+			return true
+		}
+	}
+
 	return false
 }
 
