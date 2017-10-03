@@ -3,8 +3,6 @@ package cukoofilter
 import (
 	"fmt"
 	"math/rand"
-
-	"github.com/dgryski/go-metro"
 )
 
 //MaxNumKicks-
@@ -23,7 +21,7 @@ func NewCukooFilter(cap int) *CukooFilter {
 }
 
 func (c *CukooFilter) fingerprint(data []byte) byte {
-	f := byte(metro.Hash64(data, 1337))
+	f := byte(hash(data))
 	if f == 0 {
 		f += 7
 	}
@@ -33,10 +31,10 @@ func (c *CukooFilter) fingerprint(data []byte) byte {
 //Insert -
 func (c *CukooFilter) Insert(data []byte) bool {
 	f := c.fingerprint(data)
-	hash := byte(metro.Hash64(data, 1337))
+	hashV := byte(hash(data))
 
-	i1 := int(hash) % len(c.buckets)
-	i2 := i1 ^ int(byte(metro.Hash64([]byte{hash}, 1337)))
+	i1 := int(hashV) % len(c.buckets)
+	i2 := i1 ^ int(byte(hash([]byte{hashV})))
 
 	fmt.Println(i1, i2)
 
