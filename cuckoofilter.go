@@ -1,4 +1,4 @@
-package cukoofilter
+package cuckoofilter
 
 import (
 	"fmt"
@@ -11,23 +11,23 @@ const bucketSize = 4
 
 type bucket [bucketSize]byte
 
-//CukooFilter -
-type CukooFilter struct {
+//CuckooFilter -
+type CuckooFilter struct {
 	buckets []bucket
 	count   int
 }
 
-//NewCukooFilter -
-func NewCukooFilter(cap int) *CukooFilter {
+//NewCuckooFilter -
+func NewCuckooFilter(cap int) *CuckooFilter {
 	buckets := make([]bucket, cap)
 	for i := range buckets {
 		buckets[i] = [bucketSize]byte{}
 	}
 
-	return &CukooFilter{buckets, 0}
+	return &CuckooFilter{buckets, 0}
 }
 
-func (c *CukooFilter) fingerprint(data []byte) byte {
+func (c *CuckooFilter) fingerprint(data []byte) byte {
 	f := byte(hash(data))
 	if f == 0 {
 		f += 7
@@ -53,7 +53,7 @@ func (c *CukooFilter) fingerprint(data []byte) byte {
 // return Done;
 // // Hashtable is considered full;
 // return Failure;
-func (c *CukooFilter) Insert(data []byte) bool {
+func (c *CuckooFilter) Insert(data []byte) bool {
 	f := c.fingerprint(data)
 	hashV := byte(hash(data))
 
@@ -81,7 +81,7 @@ func (c *CukooFilter) Insert(data []byte) bool {
 	return false
 }
 
-func (c *CukooFilter) insert(index int, footprint byte) bool {
+func (c *CuckooFilter) insert(index int, footprint byte) bool {
 	for k, v := range c.buckets[index] {
 		if v == 0 {
 			c.buckets[index][k] = footprint
@@ -99,7 +99,7 @@ func (c *CukooFilter) insert(index int, footprint byte) bool {
 // if bucket[i1] or bucket[i2] has f then
 // return True;
 // return False;
-func (c *CukooFilter) Lookup(data []byte) bool {
+func (c *CuckooFilter) Lookup(data []byte) bool {
 	f := c.fingerprint(data)
 	hashV := byte(hash(data))
 
@@ -125,7 +125,7 @@ func (c *CukooFilter) Lookup(data []byte) bool {
 // remove a copy of f from this bucket;
 // return True;
 // return False;
-func (c *CukooFilter) Delete(data []byte) bool {
+func (c *CuckooFilter) Delete(data []byte) bool {
 	f := c.fingerprint(data)
 	hashV := byte(hash(data))
 
@@ -151,6 +151,6 @@ func (c *CukooFilter) Delete(data []byte) bool {
 }
 
 //Count -
-func (c *CukooFilter) Count() int {
+func (c *CuckooFilter) Count() int {
 	return c.count
 }

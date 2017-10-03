@@ -1,4 +1,4 @@
-package cukoofilter
+package cuckoofilter
 
 import metro "github.com/dgryski/go-metro"
 
