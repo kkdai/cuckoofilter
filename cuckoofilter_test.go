@@ -15,7 +15,7 @@ func TestInsert(t *testing.T) {
 		t.Error("Delete: failed")
 	}
 
-	if ret := ck.Lookup([]byte("bcd")); !ret {
+	if ret := ck.Lookup([]byte("bcd")); ret {
 		t.Error("Lookup: failed")
 	}
 

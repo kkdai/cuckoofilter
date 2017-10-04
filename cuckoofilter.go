@@ -1,7 +1,6 @@
 package cuckoofilter
 
 import (
-	"fmt"
 	"math/rand"
 )
 
@@ -59,8 +58,6 @@ func (c *CuckooFilter) Insert(data []byte) bool {
 
 	i1 := int(hashV) % len(c.buckets)
 	i2 := i1 ^ int(byte(hash([]byte{hashV})))
-
-	fmt.Println(i1, i2)
 
 	if c.insert(i1, f) || c.insert(i2, f) {
 		return true
@@ -138,11 +135,13 @@ func (c *CuckooFilter) Delete(data []byte) bool {
 	for i := 0; i < bucketSize; i++ {
 		if b1[i] == f {
 			b1[i] = 0
+			c.buckets[i1] = b1
 			return true
 		}
 
 		if b2[i] == f {
 			b2[i] = 0
+			c.buckets[i2] = b2
 			return true
 		}
 	}
